@@ -1,0 +1,40 @@
+# Copyright (c) MONAI Consortium
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#     http://www.apache.org/licenses/LICENSE-2.0
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# 说明：该 Dockerfile 在保留原示例 Dockerfile 的基础上，单独加入自定义 UNet 3D 分割 Triton Python Backend 模型。
+
+FROM nvcr.io/nvidia/tritonserver:24.10-py3
+
+# create model directory in container
+RUN mkdir -p /models/unet_segment_3d/1
+
+# install project-specific dependencies
+COPY requirements.server.unet_segment_3d.txt /tmp/requirements.server.unet_segment_3d.txt
+ENV PIP_DEFAULT_TIMEOUT=300 \
+    PIP_RETRIES=10 \
+    PIP_INDEX_URL=https://pypi.org/simple \
+    PIP_EXTRA_INDEX_URL=https://download.pytorch.org/whl/cu121
+
+RUN python3 -c "import sys; print('Python', sys.version)" \
+ && python3 -m pip install --default-timeout=300 --retries 10 -r /tmp/requirements.server.unet_segment_3d.txt \
+ && python3 -c "import torch; print('Installed torch:', torch.__version__)" \
+ && rm /tmp/requirements.server.unet_segment_3d.txt
+
+# custom unet_segment_3d model only
+COPY models/unet_segment_3d/config.pbtxt /models/unet_segment_3d
+COPY models/unet_segment_3d/1/model.py /models/unet_segment_3d/1
+
+# 直接复制权重到模型版本目录（按你的偏好：copy 而不是挂载/下载）
+# 注意：该路径是 build context 下的相对路径，你需要把权重文件放到该位置。
+# 约定文件名：model.pth
+COPY UnetSegment3D/model_epoch_1000.pth /models/unet_segment_3d/1/model.pth
+
+ENTRYPOINT [ "tritonserver", "--model-repository=/models" ]

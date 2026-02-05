@@ -1,2 +1,40 @@
 *.md
 .venv
+
+# Ignore git and python caches
+.git
+**/.git
+__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.ipynb_checkpoints/
+**/.ipynb_checkpoints/
+
+# Ignore large model/data artifacts (keep images small & stable)
+**/*.pth
+# but allow the specific checkpoint we want in the image
+!UnetSegment3D/model_epoch_1000.pth
+
+**/*.pt
+**/*.ckpt
+**/*.onnx
+**/*.engine
+**/*.trt
+
+# Medical imaging / numpy blobs often huge
+**/*.nii
+**/*.nii.gz
+**/*.nrrd
+**/*.mha
+**/*.mhd
+**/*.dcm
+**/*.npz
+**/*.npy
+
+# Logs / outputs
+**/runs/
+**/logs/
+**/output/
+**/outputs/

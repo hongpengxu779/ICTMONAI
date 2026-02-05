@@ -1,0 +1,15 @@
+# Minimal server-side requirements for Triton Python Backend model: unet_segment_3d
+# Keep this separate from the demo's requirements.txt to avoid pinning issues.
+
+--index-url https://pypi.org/simple
+--extra-index-url https://download.pytorch.org/whl/cu121
+
+# MONAI and its deps
+monai
+nibabel
+numpy
+
+# PyTorch (匹配 cu121 / CUDA 12.1)
+torch==2.5.1+cu121
+torchvision==0.20.1+cu121
+torchaudio==2.5.1+cu121
