@@ -40,6 +40,16 @@
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
+# UNet 3D 分割（unet_segment_3d）
+
+> 说明：UNet 3D 分割相关内容已完整收拢到独立子工程：`deployment/Triton/unet_segment_3d/`。
+>
+> - 构建镜像：运行 `deployment/Triton/unet_segment_3d/scripts/build.ps1`
+> - 运行服务：运行 `deployment/Triton/unet_segment_3d/scripts/run.ps1`（默认包含 `--shm-size=2g`）
+> - 客户端示例：见 `deployment/Triton/unet_segment_3d/client/`
+>
+> 旧的 UNet 专用入口（旧 Dockerfile/requirements/脚本/客户端）已归档到：`deployment/Triton/_legacy_unet_segment_3d/`，不再建议直接使用。
+
 Deploying MONAI Code via Triton Python Backend
 ================================================
 

@@ -1,0 +1,21 @@
+# Keep build context small for unet_segment_3d sub-project
+
+# VCS
+.git
+**/.git
+
+# Python cache
+**/__pycache__/
+**/*.pyc
+
+# Large medical images / arrays
+**/*.nii
+**/*.nii.gz
+**/*.nrrd
+**/*.dcm
+**/*.npy
+**/*.npz
+
+# Weights: ignore all by default, allow only the one we package
+**/*.pth
+!training/weights/model_epoch_1000.pth
